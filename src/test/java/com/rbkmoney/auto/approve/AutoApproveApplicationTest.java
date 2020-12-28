@@ -1,4 +1,4 @@
-package com.rbkmoney.autoapprove;
+package com.rbkmoney.auto.approve;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

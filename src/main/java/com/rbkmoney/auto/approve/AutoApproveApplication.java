@@ -1,4 +1,4 @@
-package com.rbkmoney.autoapprove;
+package com.rbkmoney.auto.approve;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -34,3 +34,34 @@ spring:
 info:
   version: '@project.version@'
   stage: dev
+
+claim:
+  management:
+    client:
+      url: http://claim-management:8022/v1/cm
+      networkTimeout: 30000
+
+kafka:
+  bootstrap:
+    servers: "localhost:9092"
+  ssl:
+    enabled: false
+    trust-store-location: "test"
+    trust-store-password: "test"
+    key-store-location: "test"
+    key-store-password: "test"
+    key-password: "test"
+    key-store-type: PKCS12
+    trust-store-type: PKCS12
+  consumer:
+    concurrency: 5
+    client-id: biprime
+    group-id: "AutoApproveListener"
+    enable-auto-commit: false
+    auto-offset-reset: latest
+    max-poll-records: 20
+    connections-max-idle-ms: 300000
+    session-timeout-ms: 300000
+  topic: "claim-event-sink"
+  retry-policy:
+    maxAttempts: 10

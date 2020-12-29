@@ -1,11 +1,10 @@
 package com.rbkmoney.auto.approve.utils;
 
-import com.rbkmoney.damsel.claim_management.Claim;
-import com.rbkmoney.damsel.claim_management.ContractModificationUnit;
-import com.rbkmoney.damsel.claim_management.ContractorModificationUnit;
-import com.rbkmoney.damsel.claim_management.ShopModificationUnit;
+import com.rbkmoney.damsel.claim_management.*;
+import com.rbkmoney.damsel.domain.CategoryRef;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ClaimUtils {
@@ -32,6 +31,14 @@ public class ClaimUtils {
                         && unit.getModification().getPartyModification().isSetContractorModification())
                 .map(unit -> unit.getModification().getPartyModification().getContractorModification())
                 .collect(Collectors.toList());
+    }
+
+    public static Optional<Integer> extractCategoryId(List<ShopModificationUnit> modificationUnitList) {
+        return modificationUnitList.stream().filter(unit -> unit.getModification().isSetCategoryModification())
+                .map(ShopModificationUnit::getModification)
+                .map(ShopModification::getCategoryModification)
+                .map(CategoryRef::getId)
+                .findFirst();
     }
 
 }

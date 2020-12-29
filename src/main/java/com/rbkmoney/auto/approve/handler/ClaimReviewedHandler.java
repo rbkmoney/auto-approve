@@ -1,14 +1,18 @@
 package com.rbkmoney.auto.approve.handler;
 
-import com.rbkmoney.auto.approve.service.ClaimManagementService;
+import com.rbkmoney.auto.approve.service.cm.ClaimManagementService;
+import com.rbkmoney.auto.approve.service.dominant.DominantService;
 import com.rbkmoney.auto.approve.utils.ClaimUtils;
 import com.rbkmoney.damsel.claim_management.*;
+import com.rbkmoney.damsel.domain.Category;
+import com.rbkmoney.damsel.domain.CategoryType;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -16,6 +20,7 @@ import java.util.List;
 public class ClaimReviewedHandler implements EventHandler<Event>{
 
     private final ClaimManagementService claimManagementService;
+    private final DominantService dominantService;
 
     @Override
     public boolean isAccept(Event event) {
@@ -37,7 +42,13 @@ public class ClaimReviewedHandler implements EventHandler<Event>{
         List<ContractorModificationUnit> contractorModification = ClaimUtils.extractContractorModification(claim);
 
         if(!shopModification.isEmpty() && !contractModification.isEmpty() && !contractorModification.isEmpty()) {
-            claimManagementService.accept(event.getUserInfo(), partyId, claimId, claim.getRevision());
+            Optional<Integer> optionalCategoryId = ClaimUtils.extractCategoryId(shopModification);
+            if(optionalCategoryId.isPresent()) {
+                Category category = dominantService.getCategory(optionalCategoryId.get());
+                if(CategoryType.test.equals(category.getType())) {
+                    claimManagementService.accept(event.getUserInfo(), partyId, claimId, claim.getRevision());
+                }
+            }
         }
     }
 }

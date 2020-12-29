@@ -1,4 +1,4 @@
-package com.rbkmoney.auto.approve.service;
+package com.rbkmoney.auto.approve.service.cm;
 
 import com.rbkmoney.auto.approve.configuration.meta.*;
 import com.rbkmoney.auto.approve.exception.NotFoundException;

@@ -41,6 +41,11 @@ claim:
       url: http://claim-management:8022/v1/cm
       networkTimeout: 30000
 
+dominant:
+  client:
+    url: http://dominant:8022/v1/domain/repository_client
+    networkTimeout: 5000
+
 kafka:
   bootstrap:
     servers: "localhost:9092"

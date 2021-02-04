@@ -40,7 +40,7 @@ public class ClaimManagementServiceImpl implements ClaimManagementService {
         } catch (TException e) {
             throw new RuntimeException("Thrift exception while processed event", e);
         } catch (Exception e) {
-            new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         log.info("Received claim with partyId={}, claimId={}", partyId, claimId);
         return claim;

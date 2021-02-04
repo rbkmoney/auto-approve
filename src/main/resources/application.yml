@@ -60,7 +60,7 @@ kafka:
     trust-store-type: PKCS12
   consumer:
     concurrency: 5
-    client-id: biprime
+    client-id: autoapprove
     group-id: "AutoApproveListener"
     enable-auto-commit: false
     auto-offset-reset: latest

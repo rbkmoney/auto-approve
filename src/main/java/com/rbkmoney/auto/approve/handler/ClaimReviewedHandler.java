@@ -1,7 +1,7 @@
 package com.rbkmoney.auto.approve.handler;
 
-import com.rbkmoney.auto.approve.service.cm.ClaimManagementService;
-import com.rbkmoney.auto.approve.service.dominant.DominantService;
+import com.rbkmoney.auto.approve.service.ClaimManagementService;
+import com.rbkmoney.auto.approve.service.DominantService;
 import com.rbkmoney.auto.approve.utils.ClaimUtils;
 import com.rbkmoney.damsel.claim_management.*;
 import com.rbkmoney.damsel.domain.Category;
@@ -19,8 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClaimReviewedHandler implements EventHandler<Event>{
 
-    private final ClaimManagementService claimManagementService;
-    private final DominantService dominantService;
+    private final ClaimManagementService claimManagementServiceImpl;
+    private final DominantService dominantServiceImpl;
 
     @Override
     public boolean isAccept(Event event) {
@@ -36,17 +36,17 @@ public class ClaimReviewedHandler implements EventHandler<Event>{
         String partyId = statusChanged.getPartyId();
         long claimId = statusChanged.getId();
 
-        Claim claim = claimManagementService.get(event.getUserInfo(), partyId, claimId);
+        Claim claim = claimManagementServiceImpl.get(event.getUserInfo(), partyId, claimId);
         List<ShopModificationUnit> shopModification = ClaimUtils.extractShopModification(claim);
         List<ContractModificationUnit> contractModification = ClaimUtils.extractContractModification(claim);
         List<ContractorModificationUnit> contractorModification = ClaimUtils.extractContractorModification(claim);
 
-        if(!shopModification.isEmpty() && !contractModification.isEmpty() && !contractorModification.isEmpty()) {
+        if (!shopModification.isEmpty() && !contractModification.isEmpty() && !contractorModification.isEmpty()) {
             Optional<Integer> optionalCategoryId = ClaimUtils.extractCategoryId(shopModification);
-            if(optionalCategoryId.isPresent()) {
-                Category category = dominantService.getCategory(optionalCategoryId.get());
-                if(CategoryType.test.equals(category.getType())) {
-                    claimManagementService.accept(event.getUserInfo(), partyId, claimId, claim.getRevision());
+            if (optionalCategoryId.isPresent()) {
+                Category category = dominantServiceImpl.getCategory(optionalCategoryId.get());
+                if (CategoryType.test.equals(category.getType())) {
+                    claimManagementServiceImpl.accept(event.getUserInfo(), partyId, claimId, claim.getRevision());
                 }
             }
         }

@@ -35,8 +35,8 @@ public class ClaimCreatedHandler implements EventHandler<Event>{
 
         List<ShopParams> shopParamsList = ClaimUtils.extractShopParamsList(claimCreated);
         shopParamsList.forEach(shopParams -> {
-            int optionalCategoryId = shopParams.getCategory().getId();
-            Category category = dominantServiceImpl.getCategory(optionalCategoryId);
+            int categoryId = shopParams.getCategory().getId();
+            Category category = dominantServiceImpl.getCategory(categoryId);
             if (CategoryType.test.equals(category.getType())) {
                 claimManagementServiceImpl.accept(event.getUserInfo(), partyId, claimId, claimCreated.getRevision());
             }

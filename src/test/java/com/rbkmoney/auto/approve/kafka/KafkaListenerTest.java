@@ -2,6 +2,9 @@ package com.rbkmoney.auto.approve.kafka;
 
 import com.rbkmoney.auto.approve.handler.ClaimCreatedHandler;
 import com.rbkmoney.damsel.claim_management.*;
+import com.rbkmoney.damsel.domain.CategoryRef;
+import com.rbkmoney.damsel.domain.ShopDetails;
+import com.rbkmoney.damsel.domain.ShopLocation;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -46,10 +50,20 @@ public class KafkaListenerTest extends AbstractKafkaTest {
                         .setEmail("kek@kek.ru")
                         .setUsername("kekke")
                         .setType(UserType.internal_user(new InternalUser())))
-                .setChange(Change.status_changed(new ClaimStatusChanged()
+                .setChange(Change.created(new ClaimCreated()
                         .setPartyId("party_id")
                         .setId(12456)
-                        .setUpdatedAt("kekkekekekekek")
-                        .setStatus(ClaimStatus.review(new ClaimReview()))));
+                        .setCreatedAt("kekkekekekekek")
+                        .setRevision(11)
+                        .setChangeset(List.of(Modification.party_modification(PartyModification.shop_modification(
+                                new ShopModificationUnit()
+                                        .setId("kek")
+                                        .setModification(ShopModification.creation(
+                                                new ShopParams()
+                                                        .setLocation(ShopLocation.url("rrr"))
+                                                        .setContractId("ee")
+                                                        .setDetails(new ShopDetails("ff"))
+                                                        .setPayoutToolId("1111")
+                                                        .setCategory(new CategoryRef(1))))))))));
     }
 }

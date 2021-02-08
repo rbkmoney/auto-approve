@@ -1,6 +1,6 @@
 package com.rbkmoney.auto.approve.kafka;
 
-import com.rbkmoney.auto.approve.handler.ClaimReviewedHandler;
+import com.rbkmoney.auto.approve.handler.ClaimCreatedHandler;
 import com.rbkmoney.damsel.claim_management.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -24,7 +24,7 @@ public class KafkaListenerTest extends AbstractKafkaTest {
     private KafkaTemplate<String, Event> kafkaTemplate = new KafkaTemplate<>(createProducerFactory());
 
     @MockBean
-    private ClaimReviewedHandler reviewedHandler;
+    private ClaimCreatedHandler reviewedHandler;
 
     @Before
     public void setUp(){

@@ -1,44 +1,19 @@
 package com.rbkmoney.auto.approve.utils;
 
 import com.rbkmoney.damsel.claim_management.*;
-import com.rbkmoney.damsel.domain.CategoryRef;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ClaimUtils {
 
-    public static List<ShopModificationUnit> extractShopModification(Claim claim) {
+    public static List<ShopParams> extractShopParamsList(ClaimCreated claim) {
         return claim.getChangeset().stream()
-                .filter(unit -> unit.getModification().isSetPartyModification()
-                        && unit.getModification().getPartyModification().isSetShopModification())
-                .map(unit -> unit.getModification().getPartyModification().getShopModification())
+                .filter(unit -> unit.isSetPartyModification()
+                        && unit.getPartyModification().isSetShopModification()
+                        && unit.getPartyModification().getShopModification().getModification().isSetCreation())
+                .map(unit -> unit.getPartyModification().getShopModification().getModification().getCreation())
                 .collect(Collectors.toList());
-    }
-
-    public static List<ContractModificationUnit> extractContractModification(Claim claim) {
-        return claim.getChangeset().stream()
-                .filter(unit -> unit.getModification().isSetPartyModification()
-                        && unit.getModification().getPartyModification().isSetContractModification())
-                .map(unit -> unit.getModification().getPartyModification().getContractModification())
-                .collect(Collectors.toList());
-    }
-
-    public static List<ContractorModificationUnit> extractContractorModification(Claim claim) {
-        return claim.getChangeset().stream()
-                .filter(unit -> unit.getModification().isSetPartyModification()
-                        && unit.getModification().getPartyModification().isSetContractorModification())
-                .map(unit -> unit.getModification().getPartyModification().getContractorModification())
-                .collect(Collectors.toList());
-    }
-
-    public static Optional<Integer> extractCategoryId(List<ShopModificationUnit> modificationUnitList) {
-        return modificationUnitList.stream().filter(unit -> unit.getModification().isSetCategoryModification())
-                .map(ShopModificationUnit::getModification)
-                .map(ShopModification::getCategoryModification)
-                .map(CategoryRef::getId)
-                .findFirst();
     }
 
 }
